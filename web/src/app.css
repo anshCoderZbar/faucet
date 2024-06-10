@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+.gradient-border {
+	background: linear-gradient(90deg, rgba(15, 240, 217, 1) 0%, rgba(163, 87, 245, 1) 100%);
+	padding: 3px;
+}
+
+.header_outer {
+	background: #0e0c15;
+	border-radius: 12px;
+	width: 100%;
+	height: 100%;
+}
+
+.gradient-button {
+	background: linear-gradient(
+		180deg,
+		rgba(11, 200, 200, 1),
+		rgba(0, 85, 203, 1),
+		rgba(43, 0, 170, 1)
+	);
+}
+
+.gradient_border_image {
+	border-width: 28px;
+	border-style: solid;
+	border-image-source: url(/src/lib/images/border.svg);
+	border-image-slice: 28;
+}
+@media only screen and (max-width: 991px) {
+	.gradient_border_image {
+		border-width: 29px;
+		border-image-slice: 31;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.gradient_border_image {
+		border-width: 36px;
+		border-image-slice: 41;
+	}
+}
+
+@media only screen and (max-width: 575px) {
+	.gradient_border_image {
+		border-width: 31px;
+		border-image-slice: 50;
+	}
+}

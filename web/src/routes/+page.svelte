@@ -1,12 +1,12 @@
 <script lang="ts">
-	import faucetLogo from '$lib/images/faucet_logo.svg';
-	import VectorLeftSVG from '$lib/images/vector-left.png';
 	import { PUBLIC_PRIVATE_KEY } from '$env/static/public';
 	import { ethers } from 'ethers';
 	import { onMount } from 'svelte';
-	import AddNetworkButton from '../components/AddNetworkButton.svelte';
 	import { toast } from 'svoast';
 	import axios from 'axios';
+	import Header from '../components/Header.svelte';
+	import arrow from '$lib/images/arrow.svg';
+	import X from '$lib/images/x.svg';
 
 	type Faucet = {
 		address: string;
@@ -101,147 +101,74 @@
 </svelte:head>
 
 <main>
-	<nav class="flex items-center justify-between py-9 px-5 md:px-[5vw]">
-		<img
-			src={faucetLogo}
-			alt="TrueZk Faucet"
-			class="w-[12rem] md:w-[14rem] lg:w-[16rem] xl:w-[18rem]"
-			draggable="false"
-		/>
-		<div class="font-semibold text-md md:text-lg lg:text-xl xl:text-2xl">Build on TrueZK</div>
-	</nav>
-	<div class="flex justify-center items-center p-5 h-[90vh] md:h-[85vh]">
-		<div
-			class="bg-black/10 w-[40rem] relative rounded-3xl border border-[#818181] shadow-xl px-[2rem] md:px-[3rem] xl:px-[3.75rem] pb-4"
-		>
-			<img
-				src={VectorLeftSVG}
-				alt=""
-				draggable="false"
-				class="absolute top-[-1rem] sm:top-[-2rem] md:top-[-3rem] lg-top-[-4rem] xl:top-[-5rem] left-0 w-[18vw] -z-10"
-			/>
-			<div class="grid gap-5">
-				<h1 class="text-4xl mt-[4rem] md:mt-[6rem] lg:mt-[7.88rem] font-semibold">
-					Get Test Tokens
-				</h1>
-				<div class="max-w-[450px] text-sm">
-					This faucet transfers Gas Tokens on TrueZK Testnet network. Confirm details before
-					submitting.
-				</div>
-			</div>
-			<div class="mt-10">
-				<h1 class="text-xl mb-2 font-semibold">Add TrueZK Testnet</h1>
-				<div class="mb-4 text-sm">
-					Please switch to TrueZK testnet network before claiming testnet tokens.
-				</div>
-				<AddNetworkButton />
-			</div>
-			<div class="mt-5">
-				<form class="grid gap-3">
-					<label for="wallet_addr" class="text-2xl"> Wallet Address </label>
-					<div class="grid gap-2">
-						<input
-							class="bg-[#222] outline outline-1 focus:outline-none focus:ring focus:ring-[#18A974] py-2 px-8 rounded-lg"
-							type="text"
-							name="wallet address"
-							id="wallet_addr"
-							placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-							bind:value={address}
-						/>
-						{#if validateAddress(address) !== true && address !== ''}
-							<span class="text-[#FF5858]">Invalid Address</span>
-						{:else}
-							<span class="h-[24px]" />
-						{/if}
-					</div>
-				</form>
-			</div>
-			<div class="mt-5">
-				<h2 class="font-medium text-2xl">Share a tweet to get bonus!</h2>
-				<div class="flex gap-6 mt-4">
-					<button
-						type="button"
-						class="border py-2 px-4 rounded-xl flex gap-2 items-center hover:bg-white/10 transition-colors"
-						on:click={() => {
-							open(intent, '_blank');
-							amount = 8;
-						}}
-						><svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="25"
-							height="24"
-							viewBox="0 0 25 24"
-							fill="none"
-						>
-							<path
-								d="M18.8263 1.9043H22.1998L14.8297 10.3278L23.5 21.7903H16.7112L11.394 14.8383L5.30995 21.7903H1.93443L9.81743 12.7804L1.5 1.9043H8.46111L13.2674 8.25863L18.8263 1.9043ZM17.6423 19.7711H19.5116L7.44539 3.81743H5.43946L17.6423 19.7711Z"
-								fill="white"
-							/>
-						</svg> Share In Twitter</button
-					>
-				</div>
-			</div>
-			<button
-				style="background: linear-gradient(90deg, #5AD153 0%, #26B682 45.7%, #0BA99A 103.24%)"
-				class="flex items-center justify-between mt-10 py-4 px-8 rounded-xl w-full text-left font-semibold disabled:cursor-not-allowed disabled:opacity-50"
-				type="button"
-				on:click={() => {
-					loading = true;
-					sendFaucetTZK(address, amount);
-				}}
-				disabled={allowClaim}
-			>
-				{#if loading}
-					<span class="flex gap-1 items-center self-center">
-						<svg
-							aria-hidden="true"
-							role="status"
-							class="inline mr-2 w-4 h-4 text-gray-100 animate-spin"
-							viewBox="0 0 100 101"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-								fill="currentColor"
-							/>
-							<path
-								d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-								fill="#2dd4bf"
-							/>
-						</svg>{' '}
-						Sending TZK tokens...
-					</span>
-				{:else}
-					Get My TrueZK Test Tokens
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="28"
-						height="22"
-						viewBox="0 0 28 22"
-						fill="none"
-					>
-						<path
-							d="M1.86328 11.2021L26.8849 11.0576"
-							stroke="white"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M16.7605 0.999436C19.1093 5.71698 21.5396 7.81109 26.8835 11.0568C22.1224 13.6729 19.7381 15.5265 16.9883 20.8848"
-							stroke="white"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-				{/if}
-			</button>
-			<div class="text-[#8C8C8C] flex justify-center gap-1 mt-14 text-sm">
-				Have any issues? <a class="text-white font-medium" href="mailto:no-reply@truezk.com">
-					Contact Us</a
+	<div class="container mx-auto px-5">
+		<Header />
+		<div class="flex flex-col h-[80vh] md:h-[90vh] lg:h-screen w-full justify-center">
+			<div class="max-w-[652px] text-center mx-auto">
+				<h1
+					class="text-white text-xl mt-6 sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl sm:mt-8 md:mt-10 lg:mt-12 xl:mt-14 font-semibold"
 				>
+					Get Cipherem Faucets
+				</h1>
+				<p class="text-white text-base sm:text-lg md:text-xl xl:text-2xl font-normal mt-2 sm:mt-3">
+					This faucet transfer gas token on Cipherem Testnet network, confirm details before
+					submitting
+				</p>
+			</div>
+			<div
+				class="max-w-[800px] w-full mx-auto gradient_border_image mt-5 sm:mt-7 lg:mt-9 xl:mt-11 mb-8 lg:mb-10 xl:mb-13 rounded-2xl"
+			>
+				<div class="rounded-2xl bg-[#0e0c15]">
+					<h3 class="text-white text-lg sm:text-xl lg:text-2xl font-semibold text-center">
+						Add Cipherem Testnet
+					</h3>
+					<p
+						class="text-white text-sm sm:text-base sm:mt-3 md:text-lg md:mt-4 xl:text-xl mt-2 text-center"
+					>
+						Please switch to Cipherem testnet network before claiming testnet tokens
+					</p>
+					<div
+						class="gradient-button h-full max-w-max rounded-full mx-auto my-4 sm:my-6 sm:mb-8 mb-6 shadow-[#0E0C15]"
+					>
+						<button
+							class="px-8 sm:px-10 py-3 text-sm font-bold text-white lg:text-base 2xl:text-lg"
+						>
+							Connect Cipherem Testnet
+						</button>
+					</div>
+					<div class="w-full gradient-border rounded-full">
+						<input
+							type="text"
+							class="w-full py-3 md:py-4 sm:px-6 md:px-8 px-4 bg-[#0e0c15] rounded-full placeholder:text-sm outline-none"
+							placeholder="Enter your wallet address"
+						/>
+					</div>
+					<div
+						class="flex justify-center mt-5 mb-8 sm:mt-7 md:mt-10 sm:mb-10 md:mb-13 lg:mb-16 mx-auto"
+					>
+						<button
+							class="border-2 border-[#0FF0D9] px-2 sm:px-6 md:px-10 lg:px-12 xl:px-16 text-sm lg:text-base 2xl:text-lg py-4 font-semibold rounded-full flex items-center justify-between gap-2 shadow-xl shadow-[#0E0C15] transition-all duration-200 hover:bg-[#0FF0D9]"
+							>Get My Cipherem Test Tokens <span><img src={arrow} alt="arrow" /></span></button
+						>
+					</div>
+					<div class="flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7">
+						<p class="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center">
+							Share a tweet to get bonus!
+						</p>
+						<div class="gradient-button h-full max-w-max rounded-full mx-auto shadow-[#0E0C15]">
+							<button
+								class="flex justify-between items-center gap-5 px-8 sm:px-10 lg:px-12 py-3 text-sm font-bold text-white lg:text-base 2xl:text-lg"
+							>
+								<span><img src={X} alt="x" /></span>Share in Twitter
+							</button>
+						</div>
+						<p class="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center">
+							Have any issue? <span class="font-medium text-base md:text-lg xl:text-xl"
+								>Contact us</span
+							>
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -249,7 +176,14 @@
 
 <style lang="postcss">
 	:global(html) {
-		background-color: #121212;
+		background-image: url('/src/lib/images/faucet-background.png');
+		background-repeat: no-repeat;
+		background-position: center;
+		width: 100%;
+		min-height: 100vh;
+		height: fit-content;
+		background-size: cover;
 		color: #fff;
+		font-family: 'Urbanist', sans-serif;
 	}
 </style>
