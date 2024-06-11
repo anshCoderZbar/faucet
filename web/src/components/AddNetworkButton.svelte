@@ -63,18 +63,17 @@
 
 <main>
 	<button
-		style="background: radial-gradient(84.92% 150% at 50% 138.75%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 100%),rgba(255, 255, 255, 0.01)"
 		class={`${
 			network && 'opacity-50'
-		} text-white w-full px-6 py-3 rounded-xl border border-solid border-white/10`}
+		} px-8 sm:px-10 py-3 text-sm font-bold text-white lg:text-base 2xl:text-lg`}
 		on:click={() => {
 			addTrueZK();
 		}}
 	>
 		{#if network}
-			Connected to TrueZK Testnet
+			Connected to Cipherem Testnet
 		{:else}
-			Connect TrueZK Testnet
+			Connect Cipherem Testnet
 		{/if}
 	</button>
 </main>
